@@ -74,8 +74,12 @@ param(
 	[Int32]$Version = 0
 	,
 	[Parameter(Position=0,Mandatory=$FALSE,ValueFromPipeline=$FALSE,ValueFromPipelineByPropertyName=$FALSE)]
-	[ValidateSet("x86","x86_arm","x86_amd64","amd64","amd64_arm","amd64_x86","arm","Win32","Win64","x64")]
-	[String]$Architecture = ""
+	[ValidateSet("X86","Amd64","Arm")]
+	[System.Reflection.ProcessorArchitecture]$Host = [System.Reflection.ProcessorArchitecture]::None
+	,
+	[Parameter(Position=0,Mandatory=$FALSE,ValueFromPipeline=$FALSE,ValueFromPipelineByPropertyName=$FALSE)]
+	[ValidateSet("X86","Amd64","Arm")]
+	[System.Reflection.ProcessorArchitecture]$Target = [System.Reflection.ProcessorArchitecture]::None
 )
 	# Private function only used in this cmdlet
 	function Get-ToolsString()
@@ -102,7 +106,9 @@ param(
 	# Private function only used in this cmdlet
 	function Get-ArchitectureString()
 	{
-		param([String]$Arch)
+		param([System.Reflection.ProcessorArchitecture]$HostArch
+		      ,
+		      [System.Reflection.ProcessorArchitecture]$TargetArch)
 		switch ($Arch)
 		{
 			# Platform names used by MS scripts
